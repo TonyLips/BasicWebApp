@@ -1,0 +1,14 @@
+﻿body {
+
+}
+
+div {
+    height: 50%;
+}
+
+.page {
+    width: 100%;
+    min-height: 100vh;
+    border: 2px solid red;
+    background-color: pink;
+}

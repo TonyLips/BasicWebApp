@@ -1,0 +1,13 @@
+﻿body {
+}
+
+div {
+    float: left;
+    width: 33.3333333%;
+    display: inline-block;
+}
+
+.NewsHolder {
+    width: 100%;
+    background-color: yellow;
+}

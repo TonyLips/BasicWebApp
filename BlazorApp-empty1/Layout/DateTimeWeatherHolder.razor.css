@@ -1,0 +1,14 @@
+﻿body {
+}
+
+div {
+/*float: left; makes both div's side by side here*/
+    float: left;
+    width: 50%;
+    display: inline-block;
+}
+
+.DateTimeAndWeatherHolder {
+    width: 100%;
+    background-color: purple;
+}
