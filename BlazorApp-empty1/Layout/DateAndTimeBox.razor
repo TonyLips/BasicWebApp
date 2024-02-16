@@ -5,9 +5,6 @@
         <h1>The current time is:
             
             <time class="DateTime">
-                @{
-                    Timer timer = new Timer(InvokeAsync(StateHasChanged), null, 0, 1000);
-                }
                 @DateTime.Now
             </time>
             
