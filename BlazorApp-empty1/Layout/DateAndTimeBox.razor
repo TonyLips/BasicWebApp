@@ -1,14 +1,34 @@
 ﻿@inherits LayoutComponentBase
 
+@* /the issue here is that DateTime needs to be called every minute(or second)
+depending on accuracy. Either need a timer or something with async maybe both
+*@
 <div class="DateAndTimeBox">
     <main>
         <h1>The current time is:
             
             <time class="DateTime">
-                @DateTime.Now
+                @currentTime
             </time>
             
         </h1>
     </main>
 
 </div>
+
+@code
+{
+    private string currentTime = DateTime.Now.ToString();
+    System.Threading.Timer timer;
+    protected override async Task OnInitializedAsync()
+    {
+        timer = new System.Threading.Timer(e =>
+        {
+            InvokeAsync(() =>
+            {
+                currentTime = DateTime.Now.ToString();
+                StateHasChanged();
+            });
+        }, null, 0, 1000);
+    }
+}

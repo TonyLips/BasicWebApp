@@ -2,7 +2,39 @@
 
 <div class="WeatherBox">
     <main>
-        <h1>Weather</h1>
+        <h1>@weather</h1>
     </main>
 
 </div>
+
+
+@code {
+    // working api call from OpenWeatherMap
+    // https://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275
+    // open weather API call info https://openweathermap.org/forecast5
+    static Uri uri = new Uri("http://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
+    private string weather = "Weather";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Console.WriteLine("reached try/catch");
+            HttpClient client = new HttpClient();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
+            // HttpResponseMessage response = client.Send(request);
+            // string responseBody = await response.Content.ReadAsStringAsync();
+
+            // Console.WriteLine(responseBody);
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine("\nException Caught!");
+            Console.WriteLine("Message:{0} } ", e.Message);
+        }
+    }
+    
+
+    
+
+}
