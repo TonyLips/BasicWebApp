@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@inject IHttpClientFactory ClientFactory
 
 <div class="WeatherBox">
     <main>
@@ -9,32 +12,51 @@
 
 
 @code {
-    // working api call from OpenWeatherMap
     // https://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275
     // open weather API call info https://openweathermap.org/forecast5
-    static Uri uri = new Uri("http://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
+
+
+    Uri uri = new Uri("https://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
     private string weather = "Weather";
+    private IEnumerable<WeatherData.Main> data = Array.Empty<WeatherData.Main>();
 
     protected override async Task OnInitializedAsync()
     {
+        WeatherData currentWeather = new();
         try
         {
-            Console.WriteLine("reached try/catch");
-            HttpClient client = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
-            // HttpResponseMessage response = client.Send(request);
-            // string responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(weather);
 
-            // Console.WriteLine(responseBody);
+            //set up client
+            var client = ClientFactory.CreateClient();
+
+            //set up request
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+            //set up response
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            //deserialize json into readable output
+            if (response.IsSuccessStatusCode)
+            {
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                //data = await JsonSerializer.DeserializeAsync<IEnumerable<WeatherData.MainWeather>>(responseStream);
+                //currentWeather = await JsonSerializer.DeserializeAsync<WeatherData>(responseStream);
+                string responseBody = await response.Content.ReadAsStringAsync();
+            }
+
+            weather = "weatherHasChanged";
+            Console.WriteLine(weather);
+            StateHasChanged();
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine("\nException Caught!");
             Console.WriteLine("Message:{0} } ", e.Message);
         }
-    }
-    
 
-    
+        
+    }
+
 
 }
