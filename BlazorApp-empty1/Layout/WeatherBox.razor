@@ -16,10 +16,10 @@
     // open weather API call info https://openweathermap.org/forecast5
 
     //for 5 day forecast
-    //Uri uri = new Uri("https://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
+    Uri uri = new Uri("https://api.openweathermap.org/data/2.5/forecast?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
 
     //for current weather only
-    Uri uri = new Uri("https://api.openweathermap.org/data/2.5/weather?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
+    //Uri uri = new Uri("https://api.openweathermap.org/data/2.5/weather?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
 
     private string weather = "Weather";
 
@@ -41,15 +41,16 @@
             //WeatherData currentWeather = new();
 
             //deserialize json into readable output
-            //currently only getting one day. i want 5 day forecast
+            //model needs to be correct when reading in info
             if (response.IsSuccessStatusCode)
             {
                 using var responseStream = await response.Content.ReadAsStreamAsync();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                WeatherData currentWeather = JsonSerializer.Deserialize<WeatherData>(responseStream);
+                //WeatherData currentWeather = JsonSerializer.Deserialize<WeatherData>(responseStream);
+                ForecastData forecast = JsonSerializer.Deserialize<ForecastData>(responseStream);
 
-                Console.WriteLine(currentWeather.wind.speed);
+                Console.WriteLine(forecast.list[0].wind.speed);
 
             }
 
