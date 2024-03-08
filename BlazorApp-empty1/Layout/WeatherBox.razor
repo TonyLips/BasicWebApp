@@ -4,9 +4,58 @@
 @inject IHttpClientFactory ClientFactory
 
 <div class="WeatherBox">
-    <main>
+    @* <main>
         <h1>@weather</h1>
-    </main>
+    </main> *@
+    <div class="Day1">
+        <main>@dayOne</main>
+        <div class="dayOneTempAtQuery">
+            <main>@dayOneCurrTemp</main>
+        </div>
+        <div class="dayOneWeatherDesc">
+            <main>@dayOneWeatherDisc</main>
+        </div>
+    </div>
+
+    <div class="Day2">
+        <main>@dayTwo</main>
+        <div class="dayTwoTempAtQuery">
+            <main>@dayTwoCurrTemp</main>
+        </div>
+        <div class="dayTwoWeatherDesc">
+            <main>@dayTwoWeatherDisc</main>
+        </div>
+    </div>
+
+    <div class="Day3">
+        <main>@dayThree</main>
+        <div class="dayThreeTempAtQuery">
+            <main>@dayThreeCurrTemp</main>
+        </div>
+        <div class="dayThreeWeatherDesc">
+            <main>@dayThreeWeatherDisc</main>
+        </div>
+    </div>
+
+    <div class="Day4">
+        <main>@dayFour</main>
+        <div class="dayFourTempAtQuery">
+            <main>@dayFourCurrTemp</main>
+        </div>
+        <div class="dayFourWeatherDesc">
+            <main>@dayFourWeatherDisc</main>
+        </div>
+    </div>
+
+    <div class="Day5">
+        <main>@dayFive</main>
+        <div class="dayFiveTempAtQuery">
+            <main>@dayFiveCurrTemp</main>
+        </div>
+        <div class="dayFiveWeatherDesc">
+            <main>@dayFiveWeatherDisc</main>
+        </div>
+    </div>
 
 </div>
 
@@ -21,7 +70,28 @@
     //for current weather only
     //Uri uri = new Uri("https://api.openweathermap.org/data/2.5/weather?lat=36.76&lon=-76.28&appid=dd507d081c2d8cb1f8b2d42d8beca275");
 
-    private string weather = "Weather";
+    private string weather;
+    private ForecastData forecast = new ForecastData();
+
+    private string dayOne;
+    private string dayOneCurrTemp;
+    private string dayOneWeatherDisc;
+
+    private string dayTwo;
+    private string dayTwoCurrTemp;
+    private string dayTwoWeatherDisc;
+
+    private string dayThree;
+    private string dayThreeCurrTemp;
+    private string dayThreeWeatherDisc;
+
+    private string dayFour;
+    private string dayFourCurrTemp;
+    private string dayFourWeatherDisc;
+
+    private string dayFive;
+    private string dayFiveCurrTemp;
+    private string dayFiveWeatherDisc;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,9 +118,36 @@
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 //WeatherData currentWeather = JsonSerializer.Deserialize<WeatherData>(responseStream);
-                ForecastData forecast = JsonSerializer.Deserialize<ForecastData>(responseStream);
+                forecast = JsonSerializer.Deserialize<ForecastData>(responseStream);
 
-                Console.WriteLine(forecast.list[0].wind.speed);
+                dayOne = returnDay(forecast.list[0].dt_txt).DayOfWeek.ToString();
+                dayOneCurrTemp = "Current temperature is: " + convertTemp(forecast.list[0].main.temp).ToString() + "° F";
+                dayOneWeatherDisc = "Weather: " + forecast.list[0].weather[0].description;
+
+                dayTwo = returnDay(forecast.list[8].dt_txt).DayOfWeek.ToString();
+                dayTwoCurrTemp = "Current temperature is: " + convertTemp(forecast.list[8].main.temp).ToString() + "° F";
+                dayTwoWeatherDisc = "Weather: " + forecast.list[8].weather[0].description;
+
+                dayThree = returnDay(forecast.list[16].dt_txt).DayOfWeek.ToString();
+                dayThreeCurrTemp = "Current temperature is: " + convertTemp(forecast.list[16].main.temp).ToString() + "° F";
+                dayThreeWeatherDisc = "Weather: " + forecast.list[16].weather[0].description;
+
+                dayFour = returnDay(forecast.list[24].dt_txt).DayOfWeek.ToString();
+                dayFourCurrTemp = "Current temperature is: " + convertTemp(forecast.list[24].main.temp).ToString() + "° F";
+                dayFourWeatherDisc = "Weather: " + forecast.list[24].weather[0].description;
+
+                dayFive = returnDay(forecast.list[32].dt_txt).DayOfWeek.ToString();
+                dayFiveCurrTemp = "Current temperature is: " + convertTemp(forecast.list[32].main.temp).ToString() + "° F";
+                dayFiveWeatherDisc = "Weather: " + forecast.list[32].weather[0].description;
+
+                dayTwo = returnDay(forecast.list[8].dt_txt).DayOfWeek.ToString();
+                dayThree = returnDay(forecast.list[16].dt_txt).DayOfWeek.ToString();
+                dayFour = returnDay(forecast.list[24].dt_txt).DayOfWeek.ToString();
+                dayFive = returnDay(forecast.list[32].dt_txt).DayOfWeek.ToString();
+
+                //Console.WriteLine(convertTemp(forecast.list[0].main.temp));
+
+                //Console.WriteLine(convertTemp(forecast.list[0].main.feels_like));
 
             }
 
@@ -64,7 +161,21 @@
             Console.WriteLine("Message:{0} } ", e.Message);
         }
 
-        
+
+    }
+
+    //converting kelvin to fehrenheit
+    public int convertTemp (double tmp)
+    {
+        tmp = 1.8*(tmp-273) + 32;
+        return (int)tmp;
+    }
+
+    public DateTime returnDay (string jsonDate)
+    {
+        string[] readInJsonDate = jsonDate.Split('-',' ');
+        DateTime jsonReturnDay;
+        return jsonReturnDay = new DateTime(Int32.Parse(readInJsonDate[0]), Int32.Parse(readInJsonDate[1]), Int32.Parse(readInJsonDate[2]));
     }
 
 

@@ -4,5 +4,6 @@
 .TechNewsBox {
     height: 50vh;
     background-color: blue;
+    overflow: auto;
     border: solid black;
 }

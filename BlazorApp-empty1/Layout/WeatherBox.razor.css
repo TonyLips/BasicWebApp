@@ -1,8 +1,66 @@
 ﻿body {
 }
 
+main {
+    text-align: center;
+    font-size: 2em;
+}
+
+
+
 .WeatherBox {
+    width: 100%;
     height: 50vh;
     background-color: blue;
     border: solid black;
+}
+
+/*div {
+    float: left;
+    width: 19%;
+    height: 50vh;
+    display: inline-block;
+    overflow: auto;
+}*/
+
+
+
+.Day1 {
+    float: left;
+    width: 20%;
+    height: 50vh;
+    display: inline-block;
+    background-color: blue;
+}
+
+.Day2 {
+    float: left;
+    width: 20%;
+    height: 50vh;
+    display: inline-block;
+    background-color: blue;
+}
+
+.Day3 {
+    float: left;
+    width: 20%;
+    height: 50vh;
+    display: inline-block;
+    background-color: blue;
+}
+
+.Day4 {
+    float: left;
+    width: 20%;
+    height: 50vh;
+    display: inline-block;
+    background-color: blue;
+}
+
+.Day5 {
+    float: left;
+    width: 20%;
+    height: 50vh;
+    display: inline-block;
+    background-color: blue;
 }

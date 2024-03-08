@@ -5,9 +5,12 @@ div {
     float: left;
     width: 33.3333333%;
     display: inline-block;
+    overflow: auto;
+
 }
 
 .NewsHolder {
     width: 100%;
     background-color: yellow;
+    border: solid black;
 }
