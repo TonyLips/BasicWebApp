@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@using HtmlAgilityPack
+@inject IHttpClientFactory ClientFactory
+
 
 <div class="GameNewsBox">
     <main>
@@ -6,3 +9,42 @@
     </main>
 
 </div>
+
+@code {
+    //going to pull from: {websites}
+    Uri pcGamer = new Uri("https://www.pcgamer.com/");
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Console.WriteLine("Hello");
+
+            //var client = ClientFactory.CreateClient(); <- why does this break things?
+            HttpClient client = new HttpClient();
+
+            var response = client.GetStringAsync(pcGamer);
+
+            var returnUrl = ParseSite(response.Result); //the url we are trying to get
+
+            Console.WriteLine("Goodbye");
+        }
+
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine("\nException Caught!");
+            Console.WriteLine("Message:{0} } ", e.Message);
+        }
+
+    }
+
+    //https://www.scrapingbee.com/blog/web-scraping-csharp/
+    private List<string> ParseSite(string html)
+    {
+        HtmlDocument htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(html);
+
+        List<string> siteStuff = new List<string>();
+        return siteStuff;
+    }
+
+}
