@@ -22,9 +22,13 @@
             //var client = ClientFactory.CreateClient(); <- why does this break things?
             HttpClient client = new HttpClient();
 
-            var response = client.GetStringAsync(pcGamer);
 
-            var returnUrl = ParseSite(response.Result); //the url we are trying to get
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, pcGamer);
+            //HttpResponseMessage response = await client.SendAsync(request);
+
+            var response = await client.GetStringAsync(pcGamer);
+
+            var returnUrl = ParseSite(response); //the url we are trying to get. Input string error again. Kill me
 
             Console.WriteLine("Goodbye");
         }
