@@ -1,6 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @using HtmlAgilityPack
-@inject IHttpClientFactory ClientFactory
+@using System.Threading.Tasks
+@using System.Net.Http
+@using NewsAPI
+@using NewsAPI.Models
+@using NewsAPI.Constants
 
 
 <div class="GameNewsBox">
@@ -12,32 +16,43 @@
 
 @code {
     //going to pull from: {websites}
-    Uri pcGamer = new Uri("https://www.pcgamer.com/");
+    Uri pcGamer = new Uri("https://www.pcgamer.com");
+
+    //maybe use NewsData.io
+    // https://newsapi.org/ try this for news
+    //api key 529ce4d0eeec406193a442f05d4e0d16
+    Uri gameNews = new Uri("https://newsapi.org/v2/everything?q=VideoGame&sortBy=popularity&apiKey=529ce4d0eeec406193a442f05d4e0d16");
+    // https://newsapi.org/v2/everything?q=Tech&sortBy=popularity&apiKey=529ce4d0eeec406193a442f05d4e0d16
+    // https://newsapi.org/v2/everything?q=World&sortBy=popularity&apiKey=529ce4d0eeec406193a442f05d4e0d16
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            Console.WriteLine("Hello");
+            using (var client = new HttpClient())
+            {
+                //string page = await client.GetStringAsync(pcGamer); alternate way to do it? same error
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, gameNews);
 
-            //var client = ClientFactory.CreateClient(); <- why does this break things?
-            HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.SendAsync(request); //<- pcGamer won't let me web scrape
+                response.EnsureSuccessStatusCode();
+                Console.WriteLine("Passed");
+                string responseBody = await response.Content.ReadAsStringAsync();
+            }
 
-
-            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, pcGamer);
-            //HttpResponseMessage response = await client.SendAsync(request);
-
-            var response = await client.GetStringAsync(pcGamer);
-
-            var returnUrl = ParseSite(response); //the url we are trying to get. Input string error again. Kill me
-
-            Console.WriteLine("Goodbye");
         }
 
-        catch (HttpRequestException e)
-        {
-            Console.WriteLine("\nException Caught!");
-            Console.WriteLine("Message:{0} } ", e.Message);
-        }
+         catch (HttpRequestException e)
+         {
+             Console.WriteLine("\nException Caught!");
+             Console.WriteLine("Message: {0} ", e.Message);
+         }
+
+         catch (Exception e)
+         {
+             Console.WriteLine("\nAn unexpected error!");
+             Console.WriteLine("Message: {0} ", e.Message);
+         }
 
     }
 
